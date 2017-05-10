@@ -4,6 +4,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/*
+ * © 2017 Finn Bear All Rights Reserved
+ */
+
 public class Main {
 	static String numbersString = "0123456789";
 	static String lowercasesString = "abcdefghijklmnopqrstuvwxyz";
