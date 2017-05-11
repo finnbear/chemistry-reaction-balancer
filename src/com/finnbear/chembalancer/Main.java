@@ -30,19 +30,19 @@ public class Main {
 			
 			String reactionString = scanner.nextLine();
 			
-			String defaultReaction1 = "C6H12O6+O2 > H2O+CO2";
-			String defaultReaction2 = "K4FeC6N6+KMnO4+H2SO4>KHSO4+Fe2S3O12+MnSO4+HNO3+CO2+H2O";
-			String defaultReaction3 = "CuCNS+KIO3+HCl>HCN+CuSO4+ICl+H2O+KCl";
+			String[] defaultReactions = {
+					"C6H12O6+O2 > H2O+CO2",
+					"PbN2O6+FeCl3 > PbCl2+FeN2O6",
+					"CuCNS+KIO3+HCl>HCN+CuSO4+ICl+H2O+KCl",
+					"K4FeC6N6+KMnO4+H2SO4>KHSO4+Fe2S3O12+MnSO4+HNO3+CO2+H2O"
+			};
 			
-			if (reactionString.equals("1")) {
-				System.out.println("Defaulting to " + defaultReaction1);
-				reactionString = defaultReaction1;
-			} else if (reactionString.equals("2")) {
-				System.out.println("Defaulting to " + defaultReaction2);
-				reactionString = defaultReaction2;
-			} else if (reactionString.equals("3")) {
-				System.out.println("Defaulting to " + defaultReaction3);
-				reactionString = defaultReaction3;
+			try {
+				int index = Integer.parseInt(reactionString);
+				System.out.println("Defaulting to " + defaultReactions[index]);
+				reactionString = defaultReactions[index];
+			} catch (NumberFormatException e) {
+				
 			}
 			
 			reactionString = reactionString.replace(" ", "");
@@ -245,14 +245,16 @@ public class Main {
 						
 						// System.out.println(searchSpace);
 						
-						if (Math.random() < probabilitySeed * 0.5) {
-							searchSpace += 1;	
+						if (Math.random() < probabilitySeed * 0.5 || searchSpace < 10) {
+							if (iterations > 100000 || Math.random() < 0.01) {
+								searchSpace += 1;
+							}
 						} else if (Math.random() < probabilitySeed * 0.05) {
 							searchSpace += 10;
 						} else if (Math.random() < probabilitySeed * 0.02) {
 							searchSpace += 100;
 						} else if (Math.random() < probabilitySeed * 0.2) {
-							searchSpace = 0;
+							searchSpace = 1;
 						}
 					}
 					
