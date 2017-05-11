@@ -154,10 +154,14 @@ public class Main {
 					int searchSpace = 0;
 					
 					long beginSeconds = System.currentTimeMillis() / 1000;
-					long blockBeginSeconds = beginSeconds;
+					long blockBeginMillis = beginSeconds * 1000;
 					
-					while (!compareArrayEquality(reactantsElementsTotal = countElementsByFormulaCount(reactantsElements), productsElementsTotal = countElementsByFormulaCount(productsElements))) {
+					boolean changed = true;
+					
+					while (!changed || !compareArrayEquality(reactantsElementsTotal = countElementsByFormulaCount(reactantsElements), productsElementsTotal = countElementsByFormulaCount(productsElements))) {
 						float probabilitySeed = (float)(0.5 * Math.sin(iterations / (float)5000)) + 0.49f;
+						
+						changed = false;
 						
 						if (iterations == 0 || Math.random() < 0.05) {
 							reactantsElements.clear();
@@ -176,6 +180,8 @@ public class Main {
 							
 							reactantsElementsTotal = reactantsElementsInitialTotal;
 							productsElementsTotal = productsElementsInitialTotal;
+							
+							changed = true;
 						}
 						
 						assert reactantsElementsInitialTotal.length == productsElementsInitialTotal.length;
@@ -204,10 +210,12 @@ public class Main {
 								
 								if (compareArrayEquality(multipliedElements, elementsDifferences)) {
 									reactantsElements.put(reactantElements, multiple);
+									changed = true;
 									solved = true;
 								} else {
 									if (Math.random() < 0.02) {
 										reactantsElements.put(reactantElements, 1 + (int)(Math.random() * searchSpace));
+										changed = true;
 									}
 								}
 							}
@@ -225,10 +233,12 @@ public class Main {
 								
 								if (compareArrayEquality(multipliedElements, elementsDifferences)) {
 									reactantsElements.put(productElements, multiple);
+									changed = true;
 									solved = true;
 								} else {
 									if (Math.random() < 0.02) {
 										productsElements.put(productElements, 1 + (int)(Math.random() * searchSpace));
+										changed = true;
 									}
 								}
 							}
@@ -237,10 +247,10 @@ public class Main {
 						iterations += 1;
 						
 						if (iterations % 10000 == 0) {
-							long currentSeconds = System.currentTimeMillis() / 1000;
-							long deltaSeconds = currentSeconds - blockBeginSeconds;
-							System.out.println("[" + iterations + " iterations reached in " + deltaSeconds + " seconds (" + 10000 / deltaSeconds + " iterations per second).]");
-							blockBeginSeconds = currentSeconds;
+							long currentMillis = System.currentTimeMillis();
+							long deltaMillis = currentMillis - blockBeginMillis;
+							System.out.println("[" + iterations + " iterations reached in " + deltaMillis / (float)1000 + " seconds (" + Math.round((float)10000 / (deltaMillis / (float)1000)) + " iterations per second).]");
+							blockBeginMillis = currentMillis;
 						}
 						
 						// System.out.println(searchSpace);
